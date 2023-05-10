@@ -1,94 +1,57 @@
-// Chapter 4, Programming Challenge 20: Speed of Sound
+//
+//  main.cpp
+//  Homework 6
+//
+//  Created by LeCorey Johnson on 5/3/23.
+//
+
 #include <iostream>
-#include <iomanip>
-using namespace std;
+#include <string>
 
-int main()
-{
-    // Constants for speeds
-    const double AIR   = 1100;
-    const double WATER = 4900;
-    const double STEEL = 16400;
+int main() {
+    const int numMonths = 12;
+    std::string months[numMonths] = {"January", "February", "March", "April", "May", "June",
+                                     "July", "August", "September", "October", "November", "December"};
+    double rainfall[numMonths];
+    double totalRainfall = 0.0;
+    double averageRainfall;
+    double maxRainfall = 0.0;
+    double minRainfall = std::numeric_limits<double>::max();
+    std::string monthWithMaxRainfall, monthWithMinRainfall;
 
-    // Constants for menu choices
-    const int AIR_CHOICE   = 1;
-    const int WATER_CHOICE = 2;
-    const int STEEL_CHOICE = 3;
-
-    int choice;         // To hold a menu choice
-    double distance;    // To hold the distance
-    double speed;        // To hold the speed
-    double time;        // To hold the time
-
-    // Display the menu and get a choice.
-    cout << "Select a medium:\n"
-         << "1. Air\n"
-         << "2. Water\n"
-         << "3. Steel\n\n"
-         << "Enter your choice: ";
-    cin  >> choice;
-
-    // Set the numeric output formatting.
-    cout << fixed << showpoint << setprecision(4);
-
-    // Respond to the user's menu selection.
-    switch(choice)
-    {
-        case AIR_CHOICE:
-            speed = AIR;
-            cout << "Enter the distance: ";
-            cin >> distance;
-
-            // Validate the distance.
-            if (distance > 0)
-            {
-            time = distance/speed;
-            cout << "\nA sound wave takes "
-                 << time << " seconds to travel "
-                 << distance << " feet through air.\n";
+    // Input validation loop
+    for (int i = 0; i < numMonths; ++i) {
+        bool validInput = false;
+        while (!validInput) {
+            std::cout << "Enter rainfall for " << months[i] << ": ";
+            if (std::cin >> rainfall[i] && rainfall[i] >= 0) {
+                validInput = true;
+            } else {
+                std::cout << "Invalid input. Rainfall cannot be negative. Please try again." << std::endl;
+                std::cin.clear();
+                std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
             }
-            else
-                cout << "\nDistance must be greater than zero.\n";
-            break;
+        }
 
-        case WATER_CHOICE:
-            speed = WATER;
-            cout << "Enter the distance: ";
-            cin >> distance;
+        totalRainfall += rainfall[i];
 
-            // Validate the distance.
-            if (distance > 0)
-            {
-                time = distance / speed;
-                cout << "\nA sound wave takes "
-                     << time << " seconds to travel "
-                     << distance << " feet through water.\n";
-            }
-            else
-                cout << "\nDistance must be greater than zero.\n";
-            break;
+        if (rainfall[i] > maxRainfall) {
+            maxRainfall = rainfall[i];
+            monthWithMaxRainfall = months[i];
+        }
 
-        case STEEL_CHOICE:
-            speed = STEEL;
-            cout << "Enter the distance: ";
-            cin >> distance;
-
-            // Validate the distance.
-            if (distance > 0)
-            {
-                time = distance / speed;
-                cout << "\nA sound wave takes "
-                     << time << " seconds to travel "
-                     << distance << " feet through steel.\n";
-            }
-            else
-                cout << "\nDistance must be greater than zero.\n";
-            break;
-
-        default:
-            cout << "\nThe valid choices are 1 through 3. Run the\n"
-                 << "program again and select one of those.\n";
+        if (rainfall[i] < minRainfall) {
+            minRainfall = rainfall[i];
+            monthWithMinRainfall = months[i];
+        }
     }
-    
+
+    averageRainfall = totalRainfall / numMonths;
+
+    std::cout << "Total rainfall: " << totalRainfall << std::endl;
+    std::cout << "Average rainfall: " << averageRainfall << std::endl;
+    std::cout << "Least rainfall in: " << monthWithMinRainfall << std::endl;
+    std::cout << "Most rainfall in: " << monthWithMaxRainfall << std::endl;
+
     return 0;
 }
